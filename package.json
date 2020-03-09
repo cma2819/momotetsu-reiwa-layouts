@@ -1,0 +1,85 @@
+{
+  "name": "ome-speedrun-layout",
+  "version": "0.9.0",
+  "description": "NodeCG layout bundle for RTA 1n Kagawa Online.",
+  "homepage": "https://github.com/cma2819/ome-speedrun-layout#readme",
+  "author": "Cma",
+  "files": [
+    "dashboard",
+    "graphics",
+    "extension.js",
+    "extension"
+  ],
+  "keywords": [
+    "",
+    "nodecg-bundle"
+  ],
+  "nodecg": {
+    "compatibleRange": "^1.1.1",
+    "bundleDependencies": {
+      "nodecg-speedcontrol": "^2.0.0"
+    },
+    "dashboardPanels": [
+      {
+        "name": "user-addition",
+        "title": "User Addition",
+        "width": 2,
+        "file": "user-addition/index.html",
+        "headerColor": "#bcbcff",
+        "workspace": "Info Addition"
+      }
+    ],
+    "graphics": [
+      {
+        "file": "index.html",
+        "width": 1920,
+        "height": 1080
+      }
+    ]
+  },
+  "main": "../../index.js",
+  "scripts": {
+    "autofix": "run-s autofix:*",
+    "autofix:browser": "eslint --fix --ext .ts,.vue src/browser",
+    "autofix:extension": "eslint --fix --ext .ts src/extension",
+    "build": "run-s build:*",
+    "build:dashboard": "parcel build src/browser/dashboard/*/*.html --out-dir dashboard --public-url ./",
+    "build:extension": "tsc -b src/extension/",
+    "build:graphics": "parcel build src/browser/graphics/*.html --out-dir graphics --public-url ./",
+    "watch:dashboard": "parcel watch src/browser/dashboard/*.html --out-dir dashboard --public-url ./",
+    "watch:extension": "tsc -b src/extension/ -w",
+    "watch:graphics": "parcel watch src/browser/graphics/*.html --out-dir graphics --public-url ./",
+    "start": "node ../..",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "schema-types": "nodecg schema-types -o src/nodecg/generated schemas"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/cma2819/ome-speedrun-layout.git"
+  },
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/cma2819/ome-speedrun-layout/issues"
+  },
+  "devDependencies": {
+    "@types/node": "^13.7.1",
+    "@typescript-eslint/eslint-plugin": "^2.19.2",
+    "@typescript-eslint/parser": "^2.19.2",
+    "eslint": "^6.8.0",
+    "eslint-plugin-import": "^2.20.1",
+    "eslint-plugin-vue": "^6.2.1",
+    "parcel-bundler": "^1.12.4",
+    "ts-nodecg": "^0.3.0",
+    "typescript": "^3.7.5",
+    "vue-eslint-parser": "^7.0.0",
+    "vue-property-decorator": "^8.4.0",
+    "vue-template-compiler": "^2.6.11",
+    "vuex-module-decorators": "^0.16.1"
+  },
+  "dependencies": {
+    "font-awesome": "^4.7.0",
+    "vue": "^2.6.11",
+    "vuetify": "^2.2.12",
+    "vuex": "^3.1.2"
+  }
+}
