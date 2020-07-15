@@ -1,9 +1,9 @@
 {
-  "name": "ome-speedrun-layout",
+  "name": "bundle-name",
   "version": "0.9.0",
-  "description": "NodeCG layout bundle for RTA 1n Kagawa Online.",
-  "homepage": "https://github.com/cma2819/ome-speedrun-layout#readme",
-  "author": "Cma",
+  "description": "<Description of this bundle>",
+  "homepage": "<homepage url>",
+  "author": "<author>",
   "files": [
     "dashboard",
     "graphics",
@@ -16,26 +16,8 @@
   ],
   "nodecg": {
     "compatibleRange": "^1.1.1",
-    "bundleDependencies": {
-      "nodecg-speedcontrol": "^2.0.0"
-    },
-    "dashboardPanels": [
-      {
-        "name": "user-addition",
-        "title": "User Addition",
-        "width": 2,
-        "file": "user-addition/index.html",
-        "headerColor": "#bcbcff",
-        "workspace": "Info Addition"
-      }
-    ],
-    "graphics": [
-      {
-        "file": "index.html",
-        "width": 1920,
-        "height": 1080
-      }
-    ]
+    "dashboardPanels": [],
+    "graphics": []
   },
   "main": "../../index.js",
   "scripts": {
@@ -50,16 +32,15 @@
     "watch:extension": "tsc -b src/extension/ -w",
     "watch:graphics": "parcel watch src/browser/graphics/*.html --out-dir graphics --public-url ./",
     "start": "node ../..",
-    "test": "echo \"Error: no test specified\" && exit 1",
     "schema-types": "nodecg schema-types -o src/nodecg/generated schemas"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/cma2819/ome-speedrun-layout.git"
+    "url": "git+<Git repository URL>"
   },
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/cma2819/ome-speedrun-layout/issues"
+    "url": "https://github.com/<author>/<repository>/issues"
   },
   "devDependencies": {
     "@types/node": "^13.7.1",
