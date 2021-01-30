@@ -1,2 +1,2 @@
-# ome-speedrun-layout
-NodeCG layout bundle for RTA 1n Kagawa Online.
+# momotetsu-reiwa-layouts
+NodeCG layout bundle for momotetsu reiwa.
