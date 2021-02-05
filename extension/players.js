@@ -123,10 +123,11 @@ exports.players = function (nodecg) {
         if (!playersRep.value || idOrders.length !== playersRep.value.length) {
             return false;
         }
-        var ordered = playersRep.value.sort(function (l, r) {
+        var players = clone_1.default(playersRep.value);
+        players.sort(function (l, r) {
             return idOrders.indexOf(l.id) - idOrders.indexOf(r.id);
         });
-        playersRep.value = ordered;
+        playersRep.value = players;
         logger.info("reorder players to: " + JSON.stringify(idOrders));
         return true;
     };
