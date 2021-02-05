@@ -16,8 +16,42 @@
   ],
   "nodecg": {
     "compatibleRange": "^1.1.1",
-    "dashboardPanels": [],
-    "graphics": []
+    "dashboardPanels": [
+      {
+        "workspace": "Momotetsu",
+        "name": "setting-game",
+        "title": "ゲーム設定",
+        "file": "setting-game/index.html",
+        "headerColor": "#bcbcff",
+        "width": 4
+      },
+      {
+        "workspace": "Momotetsu",
+        "name": "progress-game",
+        "title": "ゲーム進捗",
+        "file": "progress-game/index.html",
+        "headerColor": "#bcbcff",
+        "width": 6
+      }
+    ],
+    "graphics": [
+        {
+            "file": "index.html",
+            "width": 1920,
+            "height": 1080
+        }
+    ],
+    "assetCategories": [
+      {
+        "name": "background",
+        "title": "背景画像",
+        "allowedTypes": [
+          "jpg",
+          "jpeg",
+          "png"
+        ]
+      }
+    ]
   },
   "main": "../../index.js",
   "scripts": {
@@ -28,11 +62,12 @@
     "build:dashboard": "parcel build src/browser/dashboard/*/*.html --out-dir dashboard --public-url ./",
     "build:extension": "tsc -b src/extension/",
     "build:graphics": "parcel build src/browser/graphics/*.html --out-dir graphics --public-url ./",
-    "watch:dashboard": "parcel watch src/browser/dashboard/*.html --out-dir dashboard --public-url ./",
+    "watch:dashboard": "parcel watch src/browser/dashboard/*/*.html --out-dir dashboard --public-url ./",
     "watch:extension": "tsc -b src/extension/ -w",
     "watch:graphics": "parcel watch src/browser/graphics/*.html --out-dir graphics --public-url ./",
     "start": "node ../..",
-    "schema-types": "nodecg schema-types -o src/nodecg/generated schemas"
+    "schema-types": "nodecg schema-types -o src/nodecg/generated schemas",
+    "schema-types:lib": "nodecg schema-types -o src/nodecg/generated schemas/lib"
   },
   "repository": {
     "type": "git",
@@ -43,23 +78,31 @@
     "url": "https://github.com/cma2819/momotetsu-reiwa-layouts/issues"
   },
   "devDependencies": {
+    "@types/clone": "^2.1.0",
     "@types/node": "^13.7.1",
+    "@types/uuid": "^8.3.0",
     "@typescript-eslint/eslint-plugin": "^2.19.2",
     "@typescript-eslint/parser": "^2.19.2",
+    "@vue/component-compiler-utils": "^3.2.0",
     "eslint": "^6.8.0",
     "eslint-plugin-import": "^2.20.1",
     "eslint-plugin-vue": "^6.2.1",
+    "nodecg-cli": "^7.0.0",
     "parcel-bundler": "^1.12.4",
     "ts-nodecg": "^0.3.0",
     "typescript": "^3.7.5",
     "vue-eslint-parser": "^7.0.0",
     "vue-property-decorator": "^8.4.0",
-    "vue-template-compiler": "^2.6.11",
+    "vue-template-compiler": "^2.6.12",
     "vuex-module-decorators": "^0.16.1"
   },
   "dependencies": {
+    "@fortawesome/fontawesome-free": "^5.15.2",
+    "clone": "^2.1.2",
     "font-awesome": "^4.7.0",
+    "uuid": "^8.3.2",
     "vue": "^2.6.11",
+    "vue-hot-reload-api": "^2.3.4",
     "vuetify": "^2.2.12",
     "vuex": "^3.1.2"
   }

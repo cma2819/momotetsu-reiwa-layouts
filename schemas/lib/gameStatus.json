@@ -1,0 +1,19 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+		"year": { "type": "number" },
+		"month": { "type": "number" },
+        "poor": { "$ref": "poor.json" },
+        "settleYear": { "type": "number" },
+        "goal": { "$ref": "goal.json" }
+    },
+    "required": [
+        "year",
+        "month",
+        "poor",
+        "settleYear",
+        "goal"
+    ]
+}

@@ -1,0 +1,29 @@
+{
+	"$schema": "http://json-schema.org/draft-07/schema",
+	"type": "object",
+	"additionalProperties": false,
+	"properties": {
+        "id": { "type": "string" },
+		"name": { "type": "string" },
+        "thumbnail": {
+            "oneOf": [
+                { "type": "string" },
+                { "type": "null"}
+            ]
+        },
+        "status": { "$ref": "playerStatus.json" },
+		"discord": {
+			"oneOf": [
+				{ "type": "null" },
+				{ "$ref": "discordUser.json" }
+			]
+		}
+    },
+    "required": [
+        "id",
+        "name",
+        "thumbnail",
+        "status",
+        "discord"
+    ]
+}
