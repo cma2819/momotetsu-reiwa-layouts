@@ -174,11 +174,12 @@ export const players = (nodecg: NodeCG): void => {
       return false;
     }
 
-    const ordered = playersRep.value.sort((l, r) => {
+    const players = clone(playersRep.value);
+    players.sort((l, r) => {
       return idOrders.indexOf(l.id) - idOrders.indexOf(r.id);
     });
 
-    playersRep.value = ordered;
+    playersRep.value = players;
     logger.info(`reorder players to: ${JSON.stringify(idOrders)}`);
     return true;
   }
