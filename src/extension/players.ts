@@ -174,17 +174,11 @@ export const players = (nodecg: NodeCG): void => {
       return false;
     }
 
-    const ordered = playersRep.value.map((player) => {
-      return idOrders.find(id => id === player.id);
-    });
-
-    if (ordered.includes(undefined)) {
-      return false;
-    }
-
-    playersRep.value = playersRep.value.sort((l, r) => {
+    const ordered = playersRep.value.sort((l, r) => {
       return idOrders.indexOf(l.id) - idOrders.indexOf(r.id);
     });
+
+    playersRep.value = ordered;
     logger.info(`reorder players to: ${JSON.stringify(idOrders)}`);
     return true;
   }

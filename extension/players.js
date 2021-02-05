@@ -123,15 +123,10 @@ exports.players = function (nodecg) {
         if (!playersRep.value || idOrders.length !== playersRep.value.length) {
             return false;
         }
-        var ordered = playersRep.value.map(function (player) {
-            return idOrders.find(function (id) { return id === player.id; });
-        });
-        if (ordered.includes(undefined)) {
-            return false;
-        }
-        playersRep.value = playersRep.value.sort(function (l, r) {
+        var ordered = playersRep.value.sort(function (l, r) {
             return idOrders.indexOf(l.id) - idOrders.indexOf(r.id);
         });
+        playersRep.value = ordered;
         logger.info("reorder players to: " + JSON.stringify(idOrders));
         return true;
     };

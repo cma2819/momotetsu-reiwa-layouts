@@ -102,6 +102,7 @@
     "axios": "^0.21.1",
     "clone": "^2.1.2",
     "font-awesome": "^4.7.0",
+    "tslib": "^2.1.0",
     "uuid": "^8.3.2",
     "vue": "^2.6.11",
     "vue-hot-reload-api": "^2.3.4",
