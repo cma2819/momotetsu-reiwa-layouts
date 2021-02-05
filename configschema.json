@@ -1,0 +1,23 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema",
+    "type": "object",
+    "additionalProperties": false,
+    "properties": {
+        "discord": {
+            "type": "object",
+            "additionalProperties": false,
+            "properties": {
+                "useDiscordOAuth": { "type": "boolean", "default": false},
+                "redirectUri": { "type": "string", "default": "http://localhost:9090/momotetsu-reiwa-layouts/discord-callback"},
+                "clientId": { "type": "string", "default": "<Client ID of your discord application>"},
+                "clientSecret": { "type": "string", "default": "<Client Secret of your discord application>"}
+            },
+            "required": [
+                "useDiscordOAuth"
+            ]
+        }
+    },
+    "required": [
+        "discord"
+    ]
+}

@@ -1,11 +1,16 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema",
     "type": "object",
-    "additionalProperties": false,
+    "additionalProperties": true,
     "properties": {
-        "id": { "type": "string" }
+        "id": { "type": "string" },
+        "username": { "type": "string" },
+        "discriminator": { "type": "string" },
+        "avatar": { "type": "string" }
     },
     "required": [
-        "id"
+        "id",
+        "username",
+        "avatar"
     ]
 }

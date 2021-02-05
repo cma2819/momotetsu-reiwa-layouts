@@ -4653,6 +4653,13 @@ readers do not read off random characters that represent icons */
   opacity: 0;
   transform: translateY(10px);
 }
+.view-transition-enter-active[data-v-c7cdb8] {
+  transition: all .5s;
+}
+.view-transition-enter[data-v-c7cdb8], .view-transition-leave[data-v-c7cdb8] {
+  opacity: 0;
+  transform: translateY(10px);
+}
 .view-transition-enter-active[data-v-30bee5] {
   transition: all .5s;
 }

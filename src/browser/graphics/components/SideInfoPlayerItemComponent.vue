@@ -1,12 +1,18 @@
 <template>
   <v-sheet :color="theme">
     <v-container>
-      <v-row dense>
+      <v-row
+        dense
+        align="end"
+      >
         <v-col
           class="font-weight-bold"
           cols="auto"
         >
-          {{ place }}
+          <side-info-rank
+            :rank="player.status.rank"
+            :color="theme"
+          ></side-info-rank>
         </v-col>
         <v-col></v-col>
         <v-col
@@ -17,11 +23,22 @@
         </v-col>
       </v-row>
       <v-row dense>
+        <v-col cols="auto">
+          <v-avatar color="white">
+            <img
+              v-if="player.thumbnail"
+              :src="player.thumbnail"
+            >
+            <span
+              v-else
+              :style="{ color: 'black' }"
+            >
+              {{ player.name[0] }}
+            </span>
+          </v-avatar>
+        </v-col>
         <v-col
-          class="ml-2"
-          :style="{
-            fontSize: '1.5em'
-          }"
+          class="font-weight-bold ml-2"
         >
           {{ player.name }}
         </v-col>
@@ -39,7 +56,14 @@
 import { Vue, Component, Prop } from 'vue-property-decorator';
 import { Player, Poor } from '../../../nodecg/generated';
 
-@Component
+import SideInfoRank from './SideInfoRankComponent.vue';
+import DefaultIconImage from '../img/peach.png';
+
+@Component({
+  components: {
+    SideInfoRank
+  }
+})
 export default class SideInfoPlayerItem extends Vue {
 
   @Prop(Object)
@@ -82,7 +106,11 @@ export default class SideInfoPlayerItem extends Vue {
     const cho = Math.floor(absMillions / 100000);
     const oku = Math.floor((absMillions / 100) % 10000);
     const million = absMillions % 100;
-    return `${isMinus ? '-' : ''}${cho ? cho + '兆' : ''}${oku ? oku + '億' : ''}${million}00万円`;
+    return `${isMinus ? '-' : ''}${cho ? cho + '兆' : ''}${oku ? oku + '億' : ''}${million ? `${million}00万` : ''}円`;
+  }
+
+  get defaultIconImageUri(): string {
+    return DefaultIconImage;
   }
 }
 </script>

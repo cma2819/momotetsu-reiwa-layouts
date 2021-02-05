@@ -24,7 +24,7 @@
             borderTop: '2px solid white'
           }"
         >
-          {{ ruleYear }}年
+          {{ ruleYear }}年<span v-if="isDuel">決戦！</span>
         </div>
       </v-col>
     </v-row>
@@ -39,6 +39,8 @@ export default class SideInfoYm extends Vue {
 
   @Prop(Number)
   readonly ruleYear!: number;
+  @Prop(Boolean)
+  readonly isDuel!: boolean;
   @Prop(Number)
   readonly statusYear!: number;
   @Prop(Number)

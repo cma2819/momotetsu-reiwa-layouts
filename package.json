@@ -35,11 +35,11 @@
       }
     ],
     "graphics": [
-        {
-            "file": "index.html",
-            "width": 1920,
-            "height": 1080
-        }
+      {
+        "file": "index.html",
+        "width": 1920,
+        "height": 1080
+      }
     ],
     "assetCategories": [
       {
@@ -78,6 +78,7 @@
     "url": "https://github.com/cma2819/momotetsu-reiwa-layouts/issues"
   },
   "devDependencies": {
+    "@types/axios": "^0.14.0",
     "@types/clone": "^2.1.0",
     "@types/node": "^13.7.1",
     "@types/uuid": "^8.3.0",
@@ -89,7 +90,7 @@
     "eslint-plugin-vue": "^6.2.1",
     "nodecg-cli": "^7.0.0",
     "parcel-bundler": "^1.12.4",
-    "ts-nodecg": "^0.3.0",
+    "ts-nodecg": "^0.3.1",
     "typescript": "^3.7.5",
     "vue-eslint-parser": "^7.0.0",
     "vue-property-decorator": "^8.4.0",
@@ -98,6 +99,7 @@
   },
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.15.2",
+    "axios": "^0.21.1",
     "clone": "^2.1.2",
     "font-awesome": "^4.7.0",
     "uuid": "^8.3.2",

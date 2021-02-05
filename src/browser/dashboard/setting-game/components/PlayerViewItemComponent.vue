@@ -10,43 +10,53 @@
       {{ player.id }}
     </v-card-subtitle>
     <v-card-actions>
-      <v-dialog
-        v-model="dialog"
-      >
-        <template v-slot:activator="{ on, attrs }">
+      <v-row align="center">
+        <v-col cols="auto">
+          <v-dialog
+            v-model="dialog"
+          >
+            <template v-slot:activator="{ on, attrs }">
+              <v-btn
+                icon
+                class="ma-2"
+                fab
+                outlined
+                small
+                v-bind="attrs"
+                v-on="on"
+              >
+                <v-icon small>
+                  fas fa-edit
+                </v-icon>
+              </v-btn>
+            </template>
+            <player-view-item-edit
+              v-model="dialog"
+              :player="player"
+            ></player-view-item-edit>
+          </v-dialog>
           <v-btn
             icon
             class="ma-2"
             fab
             outlined
             small
-            v-bind="attrs"
-            v-on="on"
           >
-            <v-icon small>
-              fas fa-edit
+            <v-icon
+              small
+              @click="deletePlayer"
+            >
+              fas fa-times
             </v-icon>
           </v-btn>
-        </template>
-        <player-view-item-edit
-          v-model="dialog"
-          :player="player"
-        ></player-view-item-edit>
-      </v-dialog>
-      <v-btn
-        icon
-        class="ma-2"
-        fab
-        outlined
-        small
-      >
-        <v-icon
-          small
-          @click="deletePlayer"
+        </v-col>
+        <v-col
+          v-if="player.discord"
+          cols="auto"
         >
-          fas fa-times
-        </v-icon>
-      </v-btn>
+          <player-view-discord :player="player"></player-view-discord>
+        </v-col>
+      </v-row>
     </v-card-actions>
   </v-card>
 </template>
@@ -57,10 +67,12 @@ import { Vue, Component, Prop, Emit } from 'vue-property-decorator';
 import { Player } from '../../../../nodecg/generated';
 
 import PlayerViewItemEdit from './PlayerViewItemEditComponent.vue';
+import PlayerViewDiscord from './PlayerViewDiscordComponent.vue'
 
 @Component({
   components: {
-    PlayerViewItemEdit
+    PlayerViewItemEdit,
+    PlayerViewDiscord,
   }
 })
 export default class PlayerViewItemComponent extends Vue {

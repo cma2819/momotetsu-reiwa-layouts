@@ -15,5 +15,8 @@ export type Players = {
 	};
 	discord: null | {
 		id: string;
+		username: string;
+		avatar: string;
+		[k: string]: any;
 	};
 }[];

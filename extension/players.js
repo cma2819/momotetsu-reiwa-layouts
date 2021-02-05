@@ -7,6 +7,12 @@ exports.players = function (nodecg) {
     var logger = new nodecg.Logger(nodecg.bundleName + ":players");
     var playersRep = nodecg.Replicant('players');
     var gameRep = nodecg.Replicant('game');
+    var initialMillions = function () {
+        if (!gameRep.value) {
+            return 0;
+        }
+        return gameRep.value.rule.isDuel ? 100 : 10;
+    };
     var addPlayer = function (name) {
         if (!playersRep.value || !gameRep.value) {
             return false;
@@ -24,7 +30,7 @@ exports.players = function (nodecg) {
             discord: null,
             status: {
                 rank: playersRep.value.length + 1,
-                millions: 10
+                millions: initialMillions()
             },
         };
         playersRep.value.push(newPlayer);
@@ -37,13 +43,33 @@ exports.players = function (nodecg) {
         if (!edit.name) {
             return false;
         }
-        var index = playersRep.value.findIndex(function (player) { return player.id = edit.id; });
+        var index = playersRep.value.findIndex(function (player) { return player.id === edit.id; });
         if (index < 0) {
             return false;
         }
         playersRep.value[index] = Object.assign({}, playersRep.value[index], {
             name: edit.name
         });
+        return true;
+    };
+    var addDiscordPlayer = function (discord) {
+        if (!playersRep.value || !gameRep.value) {
+            return false;
+        }
+        if (playersRep.value.length === gameRep.value.rule.players) {
+            return false;
+        }
+        var newPlayer = {
+            id: uuid_1.v4(),
+            name: discord.username,
+            thumbnail: "https://cdn.discordapp.com/avatars/" + discord.id + "/" + discord.avatar + ".png",
+            discord: discord,
+            status: {
+                rank: playersRep.value.length + 1,
+                millions: initialMillions()
+            },
+        };
+        playersRep.value.push(newPlayer);
         return true;
     };
     var removePlayer = function (id) {
@@ -74,6 +100,20 @@ exports.players = function (nodecg) {
                 status: {
                     rank: ranks[index],
                     millions: floored[index],
+                }
+            });
+        });
+        return true;
+    };
+    var resetSettlements = function () {
+        if (!playersRep.value) {
+            return false;
+        }
+        playersRep.value = playersRep.value.map(function (player) {
+            return Object.assign({}, player, {
+                status: {
+                    rank: 1,
+                    millions: initialMillions(),
                 }
             });
         });
@@ -145,6 +185,18 @@ exports.players = function (nodecg) {
     });
     nodecg.listenFor('player:reorder-players', function (data, cb) {
         reorderPlayers(data);
+        if (cb && !cb.handled) {
+            cb(null);
+        }
+    });
+    nodecg.listenFor('game:reset', function (_, cb) {
+        resetSettlements();
+        if (cb && !cb.handled) {
+            cb(null);
+        }
+    });
+    nodecg.listenFor('player:add-discord-player', function (data, cb) {
+        addDiscordPlayer(data);
         if (cb && !cb.handled) {
             cb(null);
         }

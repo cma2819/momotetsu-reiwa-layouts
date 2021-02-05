@@ -13,8 +13,12 @@
     </v-card-actions>
     <v-card-actions>
       <v-btn
+        v-if="!id"
         color="#7289DA"
-        :disabled="discordAuthorized"
+        :href="discordAuthUri"
+        target="_blank"
+        :disabled="!discordAuthUri"
+        @click="onOpenDiscord"
       >
         Discord連携
       </v-btn>
@@ -40,15 +44,20 @@ export default class PlayerViewItemEditComponent extends Vue {
   id = '';
   name = '';
 
+  discordAuthUri: string|null = null;
+
   created(): void {
     if (this.player) {
       this.id = this.player.id;
       this.name = this.player.name;
     }
-  }
-
-  get discordAuthorized(): boolean {
-    return (!!this.player?.discord);
+    nodecg.sendMessage('discord:auth-uri')
+    .then((uri) => {
+      this.discordAuthUri = uri;
+    })
+    .catch((err) => {
+      messageModule.activate({ message: err, error: true });
+    });
   }
 
   @Emit()
@@ -80,6 +89,10 @@ export default class PlayerViewItemEditComponent extends Vue {
           });
         });
     }
+  }
+  @Emit()
+  onOpenDiscord(): void {
+    this.closeDialog();
   }
 
   closeDialog(): void {

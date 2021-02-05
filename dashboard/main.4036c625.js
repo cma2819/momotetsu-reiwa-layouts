@@ -56137,6 +56137,11 @@ function (_super) {
     _this.isDuel = false;
     _this.years = 1;
     _this.players = 3;
+    _this.repValues = {
+      isDuel: false,
+      years: 1,
+      players: 3
+    };
     return _this;
   }
 
@@ -56147,6 +56152,7 @@ function (_super) {
       _this.isDuel = newVal.rule.isDuel;
       _this.years = newVal.rule.years;
       _this.players = newVal.rule.players;
+      _this.repValues = newVal.rule;
     });
   };
 
@@ -56161,6 +56167,13 @@ function (_super) {
       }
 
       return true;
+    },
+    enumerable: true,
+    configurable: true
+  });
+  Object.defineProperty(SettingView.prototype, "isEdited", {
+    get: function get() {
+      return this.isDuel !== this.repValues.isDuel || this.players !== this.repValues.players || this.years !== this.repValues.years;
     },
     enumerable: true,
     configurable: true
@@ -56291,7 +56304,10 @@ exports.default = SettingView;
           _c(
             "v-btn",
             {
-              attrs: { block: "", disabled: !_vm.canSubmitSetting },
+              attrs: {
+                block: "",
+                disabled: !_vm.canSubmitSetting || !_vm.isEdited
+              },
               on: { click: _vm.submitSetting }
             },
             [_vm._v("\n      ゲーム設定を反映\n    ")]
@@ -59605,25 +59621,27 @@ function (_super) {
 
     _this.id = '';
     _this.name = '';
+    _this.discordAuthUri = null;
     return _this;
   }
 
   PlayerViewItemEditComponent.prototype.created = function () {
+    var _this = this;
+
     if (this.player) {
       this.id = this.player.id;
       this.name = this.player.name;
     }
+
+    nodecg.sendMessage('discord:auth-uri').then(function (uri) {
+      _this.discordAuthUri = uri;
+    }).catch(function (err) {
+      message_1.messageModule.activate({
+        message: err,
+        error: true
+      });
+    });
   };
-
-  Object.defineProperty(PlayerViewItemEditComponent.prototype, "discordAuthorized", {
-    get: function get() {
-      var _a;
-
-      return !!((_a = this.player) === null || _a === void 0 ? void 0 : _a.discord);
-    },
-    enumerable: true,
-    configurable: true
-  });
 
   PlayerViewItemEditComponent.prototype.submitEdit = function () {
     var _this = this;
@@ -59651,6 +59669,10 @@ function (_super) {
     }
   };
 
+  PlayerViewItemEditComponent.prototype.onOpenDiscord = function () {
+    this.closeDialog();
+  };
+
   PlayerViewItemEditComponent.prototype.closeDialog = function () {
     this.$emit('input', false);
   };
@@ -59658,6 +59680,8 @@ function (_super) {
   __decorate([vue_property_decorator_1.Prop(Object)], PlayerViewItemEditComponent.prototype, "player", void 0);
 
   __decorate([vue_property_decorator_1.Emit()], PlayerViewItemEditComponent.prototype, "submitEdit", null);
+
+  __decorate([vue_property_decorator_1.Emit()], PlayerViewItemEditComponent.prototype, "onOpenDiscord", null);
 
   PlayerViewItemEditComponent = __decorate([vue_property_decorator_1.Component], PlayerViewItemEditComponent);
   return PlayerViewItemEditComponent;
@@ -59706,11 +59730,21 @@ exports.default = PlayerViewItemEditComponent;
       _c(
         "v-card-actions",
         [
-          _c(
-            "v-btn",
-            { attrs: { color: "#7289DA", disabled: _vm.discordAuthorized } },
-            [_vm._v("\n      Discord連携\n    ")]
-          ),
+          !_vm.id
+            ? _c(
+                "v-btn",
+                {
+                  attrs: {
+                    color: "#7289DA",
+                    href: _vm.discordAuthUri,
+                    target: "_blank",
+                    disabled: !_vm.discordAuthUri
+                  },
+                  on: { click: _vm.onOpenDiscord }
+                },
+                [_vm._v("\n      Discord連携\n    ")]
+              )
+            : _vm._e(),
           _vm._v(" "),
           _c("v-btn", { on: { click: _vm.submitEdit } }, [
             _vm._v(
@@ -59757,7 +59791,134 @@ render._withStripped = true
         
       }
     })();
-},{"vue-property-decorator":"../../../node_modules/vue-property-decorator/lib/vue-property-decorator.js","../../../plugin/message":"../plugin/message.ts","vue-hot-reload-api":"../../../node_modules/vue-hot-reload-api/dist/index.js","vue":"../../../node_modules/vue/dist/vue.runtime.esm.js"}],"setting-game/components/PlayerViewItemComponent.vue":[function(require,module,exports) {
+},{"vue-property-decorator":"../../../node_modules/vue-property-decorator/lib/vue-property-decorator.js","../../../plugin/message":"../plugin/message.ts","vue-hot-reload-api":"../../../node_modules/vue-hot-reload-api/dist/index.js","vue":"../../../node_modules/vue/dist/vue.runtime.esm.js"}],"setting-game/components/PlayerViewDiscordComponent.vue":[function(require,module,exports) {
+"use strict";
+
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
+var __extends = this && this.__extends || function () {
+  var _extendStatics = function extendStatics(d, b) {
+    _extendStatics = Object.setPrototypeOf || {
+      __proto__: []
+    } instanceof Array && function (d, b) {
+      d.__proto__ = b;
+    } || function (d, b) {
+      for (var p in b) {
+        if (b.hasOwnProperty(p)) d[p] = b[p];
+      }
+    };
+
+    return _extendStatics(d, b);
+  };
+
+  return function (d, b) {
+    _extendStatics(d, b);
+
+    function __() {
+      this.constructor = d;
+    }
+
+    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+  };
+}();
+
+var __decorate = this && this.__decorate || function (decorators, target, key, desc) {
+  var c = arguments.length,
+      r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc,
+      d;
+  if ((typeof Reflect === "undefined" ? "undefined" : _typeof(Reflect)) === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);else for (var i = decorators.length - 1; i >= 0; i--) {
+    if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+  }
+  return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var vue_property_decorator_1 = require("vue-property-decorator");
+
+var PlayerViewDiscord =
+/** @class */
+function (_super) {
+  __extends(PlayerViewDiscord, _super);
+
+  function PlayerViewDiscord() {
+    return _super !== null && _super.apply(this, arguments) || this;
+  }
+
+  __decorate([vue_property_decorator_1.Prop(Object)], PlayerViewDiscord.prototype, "player", void 0);
+
+  PlayerViewDiscord = __decorate([vue_property_decorator_1.Component], PlayerViewDiscord);
+  return PlayerViewDiscord;
+}(vue_property_decorator_1.Vue);
+
+exports.default = PlayerViewDiscord;
+        var $755e47 = exports.default || module.exports;
+      
+      if (typeof $755e47 === 'function') {
+        $755e47 = $755e47.options;
+      }
+    
+        /* template */
+        Object.assign($755e47, (function () {
+          var render = function() {
+  var _vm = this
+  var _h = _vm.$createElement
+  var _c = _vm._self._c || _h
+  return _c(
+    "v-sheet",
+    {
+      staticClass: "pa-2",
+      attrs: { color: "#7289DA", elevation: "2", rounded: "" }
+    },
+    [
+      _c("v-avatar", [
+        _c("img", {
+          attrs: { src: _vm.player.thumbnail, alt: _vm.player.discord.avatar }
+        })
+      ]),
+      _vm._v(
+        "\n  " +
+          _vm._s(
+            _vm.player.discord.username + "#" + _vm.player.discord.discriminator
+          ) +
+          "\n"
+      )
+    ],
+    1
+  )
+}
+var staticRenderFns = []
+render._withStripped = true
+
+          return {
+            render: render,
+            staticRenderFns: staticRenderFns,
+            _compiled: true,
+            _scopeId: null,
+            functional: undefined
+          };
+        })());
+      
+    /* hot reload */
+    (function () {
+      if (module.hot) {
+        var api = require('vue-hot-reload-api');
+        api.install(require('vue'));
+        if (api.compatible) {
+          module.hot.accept();
+          if (!module.hot.data) {
+            api.createRecord('$755e47', $755e47);
+          } else {
+            api.reload('$755e47', $755e47);
+          }
+        }
+
+        
+      }
+    })();
+},{"vue-property-decorator":"../../../node_modules/vue-property-decorator/lib/vue-property-decorator.js","vue-hot-reload-api":"../../../node_modules/vue-hot-reload-api/dist/index.js","vue":"../../../node_modules/vue/dist/vue.runtime.esm.js"}],"setting-game/components/PlayerViewItemComponent.vue":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -59813,6 +59974,8 @@ var vue_property_decorator_1 = require("vue-property-decorator");
 
 var PlayerViewItemEditComponent_vue_1 = __importDefault(require("./PlayerViewItemEditComponent.vue"));
 
+var PlayerViewDiscordComponent_vue_1 = __importDefault(require("./PlayerViewDiscordComponent.vue"));
+
 var PlayerViewItemComponent =
 /** @class */
 function (_super) {
@@ -59846,7 +60009,8 @@ function (_super) {
 
   PlayerViewItemComponent = __decorate([vue_property_decorator_1.Component({
     components: {
-      PlayerViewItemEdit: PlayerViewItemEditComponent_vue_1.default
+      PlayerViewItemEdit: PlayerViewItemEditComponent_vue_1.default,
+      PlayerViewDiscord: PlayerViewDiscordComponent_vue_1.default
     }
   })], PlayerViewItemComponent);
   return PlayerViewItemComponent;
@@ -59879,81 +60043,113 @@ exports.default = PlayerViewItemComponent;
         "v-card-actions",
         [
           _c(
-            "v-dialog",
-            {
-              scopedSlots: _vm._u([
-                {
-                  key: "activator",
-                  fn: function(ref) {
-                    var on = ref.on
-                    var attrs = ref.attrs
-                    return [
-                      _c(
-                        "v-btn",
-                        _vm._g(
-                          _vm._b(
-                            {
-                              staticClass: "ma-2",
-                              attrs: {
-                                icon: "",
-                                fab: "",
-                                outlined: "",
-                                small: ""
-                              }
-                            },
-                            "v-btn",
-                            attrs,
-                            false
-                          ),
-                          on
-                        ),
-                        [
-                          _c("v-icon", { attrs: { small: "" } }, [
-                            _vm._v("\n            fas fa-edit\n          ")
-                          ])
-                        ],
-                        1
-                      )
-                    ]
-                  }
-                }
-              ]),
-              model: {
-                value: _vm.dialog,
-                callback: function($$v) {
-                  _vm.dialog = $$v
-                },
-                expression: "dialog"
-              }
-            },
-            [
-              _vm._v(" "),
-              _c("player-view-item-edit", {
-                attrs: { player: _vm.player },
-                model: {
-                  value: _vm.dialog,
-                  callback: function($$v) {
-                    _vm.dialog = $$v
-                  },
-                  expression: "dialog"
-                }
-              })
-            ],
-            1
-          ),
-          _vm._v(" "),
-          _c(
-            "v-btn",
-            {
-              staticClass: "ma-2",
-              attrs: { icon: "", fab: "", outlined: "", small: "" }
-            },
+            "v-row",
+            { attrs: { align: "center" } },
             [
               _c(
-                "v-icon",
-                { attrs: { small: "" }, on: { click: _vm.deletePlayer } },
-                [_vm._v("\n        fas fa-times\n      ")]
-              )
+                "v-col",
+                { attrs: { cols: "auto" } },
+                [
+                  _c(
+                    "v-dialog",
+                    {
+                      scopedSlots: _vm._u([
+                        {
+                          key: "activator",
+                          fn: function(ref) {
+                            var on = ref.on
+                            var attrs = ref.attrs
+                            return [
+                              _c(
+                                "v-btn",
+                                _vm._g(
+                                  _vm._b(
+                                    {
+                                      staticClass: "ma-2",
+                                      attrs: {
+                                        icon: "",
+                                        fab: "",
+                                        outlined: "",
+                                        small: ""
+                                      }
+                                    },
+                                    "v-btn",
+                                    attrs,
+                                    false
+                                  ),
+                                  on
+                                ),
+                                [
+                                  _c("v-icon", { attrs: { small: "" } }, [
+                                    _vm._v(
+                                      "\n                fas fa-edit\n              "
+                                    )
+                                  ])
+                                ],
+                                1
+                              )
+                            ]
+                          }
+                        }
+                      ]),
+                      model: {
+                        value: _vm.dialog,
+                        callback: function($$v) {
+                          _vm.dialog = $$v
+                        },
+                        expression: "dialog"
+                      }
+                    },
+                    [
+                      _vm._v(" "),
+                      _c("player-view-item-edit", {
+                        attrs: { player: _vm.player },
+                        model: {
+                          value: _vm.dialog,
+                          callback: function($$v) {
+                            _vm.dialog = $$v
+                          },
+                          expression: "dialog"
+                        }
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "v-btn",
+                    {
+                      staticClass: "ma-2",
+                      attrs: { icon: "", fab: "", outlined: "", small: "" }
+                    },
+                    [
+                      _c(
+                        "v-icon",
+                        {
+                          attrs: { small: "" },
+                          on: { click: _vm.deletePlayer }
+                        },
+                        [_vm._v("\n            fas fa-times\n          ")]
+                      )
+                    ],
+                    1
+                  )
+                ],
+                1
+              ),
+              _vm._v(" "),
+              _vm.player.discord
+                ? _c(
+                    "v-col",
+                    { attrs: { cols: "auto" } },
+                    [
+                      _c("player-view-discord", {
+                        attrs: { player: _vm.player }
+                      })
+                    ],
+                    1
+                  )
+                : _vm._e()
             ],
             1
           )
@@ -59993,7 +60189,7 @@ render._withStripped = true
         
       }
     })();
-},{"vue-property-decorator":"../../../node_modules/vue-property-decorator/lib/vue-property-decorator.js","./PlayerViewItemEditComponent.vue":"setting-game/components/PlayerViewItemEditComponent.vue","vue-hot-reload-api":"../../../node_modules/vue-hot-reload-api/dist/index.js","vue":"../../../node_modules/vue/dist/vue.runtime.esm.js"}],"setting-game/components/PlayerViewOrderItemComponent.vue":[function(require,module,exports) {
+},{"vue-property-decorator":"../../../node_modules/vue-property-decorator/lib/vue-property-decorator.js","./PlayerViewItemEditComponent.vue":"setting-game/components/PlayerViewItemEditComponent.vue","./PlayerViewDiscordComponent.vue":"setting-game/components/PlayerViewDiscordComponent.vue","vue-hot-reload-api":"../../../node_modules/vue-hot-reload-api/dist/index.js","vue":"../../../node_modules/vue/dist/vue.runtime.esm.js"}],"setting-game/components/PlayerViewOrderItemComponent.vue":[function(require,module,exports) {
 "use strict";
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -61025,7 +61221,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "56504" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58792" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

@@ -5,18 +5,11 @@
  * and run json-schema-to-typescript to regenerate this file.
  */
 
-export interface Player {
-	id: string;
-	name: string;
-	thumbnail: string | null;
-	status: {
-		rank: number;
-		millions: number;
-	};
-	discord: null | {
-		id: string;
-		username: string;
-		avatar: string;
-		[k: string]: any;
+export interface Configschema {
+	discord: {
+		useDiscordOAuth: boolean;
+		redirectUri?: string;
+		clientId?: string;
+		clientSecret?: string;
 	};
 }

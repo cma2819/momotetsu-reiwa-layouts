@@ -9,6 +9,7 @@
     >
       <side-info-ym
         :rule-year="game.rule.years"
+        :is-duel="game.rule.isDuel"
         :status-year="game.status.year"
         :status-month="game.status.month"
       ></side-info-ym>

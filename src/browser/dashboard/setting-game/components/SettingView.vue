@@ -47,7 +47,7 @@
     >
       <v-btn
         block
-        :disabled="!canSubmitSetting"
+        :disabled="!canSubmitSetting || !isEdited"
         @click="submitSetting"
       >
         ゲーム設定を反映
@@ -67,11 +67,23 @@ export default class SettingView extends Vue {
   years = 1;
   players = 3;
 
+  repValues: {
+    isDuel: boolean,
+    years: number,
+    players: number
+  } = {
+    isDuel: false,
+    years: 1,
+    players: 3
+  };
+
   created(): void {
     nodecg.Replicant('game').on('change', (newVal) => {
       this.isDuel = newVal.rule.isDuel;
       this.years = newVal.rule.years;
       this.players = newVal.rule.players;
+
+      this.repValues = newVal.rule;
     });
   }
 
@@ -86,6 +98,12 @@ export default class SettingView extends Vue {
     }
 
     return true;
+  }
+
+  get isEdited(): boolean {
+    return (this.isDuel !== this.repValues.isDuel
+            || this.players !== this.repValues.players
+            || this.years !== this.repValues.years);
   }
 
   @Emit()

@@ -1,5 +1,5 @@
 import { v4 as uuid } from 'uuid';
-import { Player } from '../nodecg/generated';
+import { DiscordUser, Player } from '../nodecg/generated';
 import { NodeCG } from './nodecg';
 import clone from 'clone';
 
@@ -9,6 +9,14 @@ export const players = (nodecg: NodeCG): void => {
 
   const playersRep = nodecg.Replicant('players');
   const gameRep = nodecg.Replicant('game');
+
+  const initialMillions = (): number => {
+    if (!gameRep.value) {
+      return 0;
+    }
+
+    return gameRep.value.rule.isDuel ? 100 : 10;
+  }
 
   const addPlayer = (name: string): boolean => {
 
@@ -31,7 +39,7 @@ export const players = (nodecg: NodeCG): void => {
       discord: null,
       status: {
         rank: playersRep.value.length + 1,
-        millions: 10
+        millions: initialMillions()
       },
     };
 
@@ -49,7 +57,7 @@ export const players = (nodecg: NodeCG): void => {
       return false;
     }
 
-    const index = playersRep.value.findIndex(player => player.id = edit.id);
+    const index = playersRep.value.findIndex(player => player.id === edit.id);
     if (index < 0) {
       return false;
     }
@@ -62,6 +70,30 @@ export const players = (nodecg: NodeCG): void => {
       }
     );
 
+    return true;
+  }
+
+  const addDiscordPlayer = (discord: DiscordUser): boolean => {
+
+    if (!playersRep.value || !gameRep.value) {
+      return false;
+    }
+    if (playersRep.value.length === gameRep.value.rule.players) {
+      return false;
+    }
+
+    const newPlayer: Player = {
+      id: uuid(),
+      name: discord.username,
+      thumbnail: `https://cdn.discordapp.com/avatars/${discord.id}/${discord.avatar}.png`,
+      discord: discord,
+      status: {
+        rank: playersRep.value.length + 1,
+        millions: initialMillions()
+      },
+    }
+
+    playersRep.value.push(newPlayer);
     return true;
   }
 
@@ -127,7 +159,7 @@ export const players = (nodecg: NodeCG): void => {
         {
           status: {
             rank: 1,
-            millions: 10
+            millions: initialMillions(),
           }
         }
       )
@@ -228,6 +260,14 @@ export const players = (nodecg: NodeCG): void => {
       cb(null);
     }
   });
+
+  nodecg.listenFor('player:add-discord-player', (data, cb) => {
+    addDiscordPlayer(data);
+
+    if (cb && !cb.handled) {
+      cb(null);
+    }
+  })
 
   logger.info('Initialize players extensions.');
 }

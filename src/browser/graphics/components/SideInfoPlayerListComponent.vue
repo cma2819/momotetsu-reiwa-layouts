@@ -6,7 +6,7 @@
         :key="player.id"
         cols="12"
         :style="{
-          fontSize: '22px'
+          fontSize: '26px'
         }"
       >
         <side-info-player-item
