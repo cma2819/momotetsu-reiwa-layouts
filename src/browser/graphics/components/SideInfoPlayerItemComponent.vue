@@ -45,7 +45,7 @@
       </v-row>
       <v-row dense>
         <v-col class="text-right">
-          {{ millionString }}
+          {{ yenString }}
         </v-col>
       </v-row>
     </v-container>
@@ -100,13 +100,13 @@ export default class SideInfoPlayerItem extends Vue {
     return places[this.player.status.rank];
   }
 
-  get millionString(): string {
-    const isMinus = (this.player.status.millions < 0);
-    const absMillions = Math.abs(this.player.status.millions);
-    const cho = Math.floor(absMillions / 100000);
-    const oku = Math.floor((absMillions / 100) % 10000);
-    const million = absMillions % 100;
-    return `${isMinus ? '-' : ''}${cho ? cho + '兆' : ''}${oku ? oku + '億' : ''}${million ? `${million}00万` : ''}円`;
+  get yenString(): string {
+    const isMinus = (this.player.status.kiloYens < 0);
+    const absKYens = Math.abs(this.player.status.kiloYens);
+    const cho = Math.floor(absKYens / 1_000_000_000);
+    const oku = Math.floor((absKYens / 100_000) % 10_000);
+    const man = (absKYens / 10) % 10_000;
+    return `${isMinus ? '-' : ''}${cho ? cho + '兆' : ''}${oku ? oku + '億' : ''}${man ? `${man}万` : ''}円`;
   }
 
   get defaultIconImageUri(): string {

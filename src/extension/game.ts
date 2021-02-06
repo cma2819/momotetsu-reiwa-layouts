@@ -34,7 +34,7 @@ export const game = (nodecg: NodeCG): void => {
         thumbnail: null,
         status: {
           rank: 1,
-          millions: 10
+          kiloYens: 10_000
         },
         discord: null
       },

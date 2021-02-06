@@ -26,7 +26,7 @@
           </v-col>
           <v-col cols="auto">
             <v-text-field
-              v-model.number="player.status.millions"
+              v-model.number="man"
               dense
               outlined
               type="number"
@@ -34,7 +34,7 @@
               min="-99999999"
               size="12"
               label="総資産"
-              suffix="百万円"
+              suffix="万円"
               hide-details
               :rules="[settleValidation]"
             >
@@ -48,11 +48,11 @@
 
 <script lang="ts">
 /* global nodecg */
-import { Vue, Component, Prop, Emit } from 'vue-property-decorator';
+import { Vue, Component, Prop, Emit, Watch } from 'vue-property-decorator';
 import { Player, Poor } from '../../../../nodecg/generated';
 
 @Component
-export default class PlayerStatusListComponent extends Vue {
+export default class PlayerStatusItemComponent extends Vue {
 
   @Prop(Object)
   player!: Player;
@@ -62,6 +62,22 @@ export default class PlayerStatusListComponent extends Vue {
 
   @Prop(Object)
   poor?: Poor;
+
+  man = 0;
+
+  created(): void {
+    this.man = Math.floor(this.player.status.kiloYens / 10);
+  }
+
+  @Watch('player')
+  onPlayerChanged(val: Player) {
+    this.man = Math.floor(val.status.kiloYens / 10);
+  }
+
+  @Watch('man')
+  onManYenChanged(val: number) {
+    this.player.status.kiloYens = val * 10;
+  }
 
   get theme(): string {
     const themes = ['first', 'second', 'third', 'fourth'];
@@ -91,8 +107,8 @@ export default class PlayerStatusListComponent extends Vue {
   settleValidation(v: string): boolean {
 
     return v !== ''
-      && (parseInt(v) < 100000000)
-      && (parseInt(v) > -100000000)
+      && (parseInt(v) < 100_000_000_000)
+      && (parseInt(v) > -100_000_000_000)
       && (parseFloat(v) % 1 === 0);
   }
 

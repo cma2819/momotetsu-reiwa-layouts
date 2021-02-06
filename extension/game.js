@@ -30,7 +30,7 @@ exports.game = function (nodecg) {
                 thumbnail: null,
                 status: {
                     rank: 1,
-                    millions: 10
+                    kiloYens: 10000
                 },
                 discord: null
             },

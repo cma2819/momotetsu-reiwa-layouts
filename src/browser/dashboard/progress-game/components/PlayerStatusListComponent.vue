@@ -85,16 +85,16 @@ export default class PlayerStatusListComponent extends Vue {
     }
 
     return !this.players.map((player) => {
-      return (player.status.millions < 100000000)
-      && (player.status.millions > -100000000)
-      && (player.status.millions % 1 === 0);
+      return (player.status.kiloYens < 100_000_000_000)
+      && (player.status.kiloYens > -100_000_000_000)
+      && (player.status.kiloYens % 1 === 0);
     }).includes(false);
 
   }
 
   @Emit()
   submitSettlement(): void {
-    nodecg.sendMessage('player:settle-millions', this.players.map(player => player.status.millions))
+    nodecg.sendMessage('player:settle-kilo-yens', this.players.map(player => player.status.kiloYens))
       .then(() => {
         nodecg.sendMessage('game:settlement', this.settleYear);
       });

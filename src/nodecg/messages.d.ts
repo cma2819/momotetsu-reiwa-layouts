@@ -16,7 +16,7 @@ export type MessageMap = {
   'player:edit-player': { data: Player };
   'player:remove-player': { data: string };
   'player:clear-player': {};
-  'player:settle-millions': { data: number[] };
+  'player:settle-kilo-yens': { data: number[] };
   'player:reorder-players': { data: string[] };
 
   'discord:auth-uri': { result: string, error: string };

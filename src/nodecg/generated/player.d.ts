@@ -11,11 +11,12 @@ export interface Player {
 	thumbnail: string | null;
 	status: {
 		rank: number;
-		millions: number;
+		kiloYens: number;
 	};
 	discord: null | {
 		id: string;
 		username: string;
+		discriminator?: string;
 		avatar: string;
 		[k: string]: any;
 	};

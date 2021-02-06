@@ -7,11 +7,11 @@ exports.players = function (nodecg) {
     var logger = new nodecg.Logger(nodecg.bundleName + ":players");
     var playersRep = nodecg.Replicant('players');
     var gameRep = nodecg.Replicant('game');
-    var initialMillions = function () {
+    var initialKiloYens = function () {
         if (!gameRep.value) {
             return 0;
         }
-        return gameRep.value.rule.isDuel ? 100 : 10;
+        return gameRep.value.rule.isDuel ? 100000 : 10000;
     };
     var addPlayer = function (name) {
         if (!playersRep.value || !gameRep.value) {
@@ -30,7 +30,7 @@ exports.players = function (nodecg) {
             discord: null,
             status: {
                 rank: playersRep.value.length + 1,
-                millions: initialMillions()
+                kiloYens: initialKiloYens()
             },
         };
         playersRep.value.push(newPlayer);
@@ -66,7 +66,7 @@ exports.players = function (nodecg) {
             discord: discord,
             status: {
                 rank: playersRep.value.length + 1,
-                millions: initialMillions()
+                kiloYens: initialKiloYens()
             },
         };
         playersRep.value.push(newPlayer);
@@ -86,11 +86,11 @@ exports.players = function (nodecg) {
         playersRep.value = [];
         return true;
     };
-    var settleMillions = function (playerMillions) {
-        if (!playersRep.value || playerMillions.length !== playersRep.value.length) {
+    var settleKiloYens = function (playerKiloYens) {
+        if (!playersRep.value || playerKiloYens.length !== playersRep.value.length) {
             return false;
         }
-        var floored = playerMillions.map(function (millions) { return Math.floor(millions); });
+        var floored = playerKiloYens.map(function (kiloYens) { return Math.floor(kiloYens); });
         var sorted = clone_1.default(floored).sort(function (l, r) { return r - l; });
         var ranks = floored.map(function (v) {
             return sorted.indexOf(v) + 1;
@@ -99,7 +99,7 @@ exports.players = function (nodecg) {
             return Object.assign({}, player, {
                 status: {
                     rank: ranks[index],
-                    millions: floored[index],
+                    kiloYens: floored[index],
                 }
             });
         });
@@ -113,7 +113,7 @@ exports.players = function (nodecg) {
             return Object.assign({}, player, {
                 status: {
                     rank: 1,
-                    millions: initialMillions(),
+                    kiloYens: initialKiloYens(),
                 }
             });
         });
@@ -170,8 +170,8 @@ exports.players = function (nodecg) {
             cb(null);
         }
     });
-    nodecg.listenFor('player:settle-millions', function (data, cb) {
-        var status = settleMillions(data);
+    nodecg.listenFor('player:settle-kilo-yens', function (data, cb) {
+        var status = settleKiloYens(data);
         if (cb && !cb.handled) {
             if (!status) {
                 cb('決算総資産の設定に失敗しました.');

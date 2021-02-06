@@ -4,10 +4,10 @@
 	"additionalProperties": false,
 	"properties": {
 		"rank": { "type": "number" },
-		"millions": { "type": "number" }
+		"kiloYens": { "type": "number" }
     },
     "required": [
         "rank",
-        "millions"
+        "kiloYens"
     ]
 }

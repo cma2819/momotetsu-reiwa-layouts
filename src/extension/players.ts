@@ -10,12 +10,12 @@ export const players = (nodecg: NodeCG): void => {
   const playersRep = nodecg.Replicant('players');
   const gameRep = nodecg.Replicant('game');
 
-  const initialMillions = (): number => {
+  const initialKiloYens = (): number => {
     if (!gameRep.value) {
       return 0;
     }
 
-    return gameRep.value.rule.isDuel ? 100 : 10;
+    return gameRep.value.rule.isDuel ? 100_000 : 10_000;
   }
 
   const addPlayer = (name: string): boolean => {
@@ -39,7 +39,7 @@ export const players = (nodecg: NodeCG): void => {
       discord: null,
       status: {
         rank: playersRep.value.length + 1,
-        millions: initialMillions()
+        kiloYens: initialKiloYens()
       },
     };
 
@@ -89,7 +89,7 @@ export const players = (nodecg: NodeCG): void => {
       discord: discord,
       status: {
         rank: playersRep.value.length + 1,
-        millions: initialMillions()
+        kiloYens: initialKiloYens()
       },
     }
 
@@ -119,13 +119,13 @@ export const players = (nodecg: NodeCG): void => {
     return true;
   }
 
-  const settleMillions = (playerMillions: number[]): boolean => {
+  const settleKiloYens = (playerKiloYens: number[]): boolean => {
 
-    if (!playersRep.value || playerMillions.length !== playersRep.value.length) {
+    if (!playersRep.value || playerKiloYens.length !== playersRep.value.length) {
       return false;
     }
 
-    const floored = playerMillions.map(millions => Math.floor(millions));
+    const floored = playerKiloYens.map(kiloYens => Math.floor(kiloYens));
     const sorted = clone(floored).sort((l, r) => { return r - l; });
     const ranks = floored.map((v) => {
       return sorted.indexOf(v) + 1;
@@ -137,7 +137,7 @@ export const players = (nodecg: NodeCG): void => {
         {
           status: {
             rank: ranks[index],
-            millions: floored[index],
+            kiloYens: floored[index],
           }
         }
       )
@@ -159,7 +159,7 @@ export const players = (nodecg: NodeCG): void => {
         {
           status: {
             rank: 1,
-            millions: initialMillions(),
+            kiloYens: initialKiloYens(),
           }
         }
       )
@@ -229,8 +229,8 @@ export const players = (nodecg: NodeCG): void => {
     }
   });
 
-  nodecg.listenFor('player:settle-millions', (data: number[], cb) => {
-    const status = settleMillions(data);
+  nodecg.listenFor('player:settle-kilo-yens', (data: number[], cb) => {
+    const status = settleKiloYens(data);
 
     if (cb && !cb.handled) {
       if (!status) {

@@ -58887,16 +58887,31 @@ Object.defineProperty(exports, "__esModule", {
 
 var vue_property_decorator_1 = require("vue-property-decorator");
 
-var PlayerStatusListComponent =
+var PlayerStatusItemComponent =
 /** @class */
 function (_super) {
-  __extends(PlayerStatusListComponent, _super);
+  __extends(PlayerStatusItemComponent, _super);
 
-  function PlayerStatusListComponent() {
-    return _super !== null && _super.apply(this, arguments) || this;
+  function PlayerStatusItemComponent() {
+    var _this = _super !== null && _super.apply(this, arguments) || this;
+
+    _this.man = 0;
+    return _this;
   }
 
-  Object.defineProperty(PlayerStatusListComponent.prototype, "theme", {
+  PlayerStatusItemComponent.prototype.created = function () {
+    this.man = Math.floor(this.player.status.kiloYens / 10);
+  };
+
+  PlayerStatusItemComponent.prototype.onPlayerChanged = function (val) {
+    this.man = Math.floor(val.status.kiloYens / 10);
+  };
+
+  PlayerStatusItemComponent.prototype.onManYenChanged = function (val) {
+    this.player.status.kiloYens = val * 10;
+  };
+
+  Object.defineProperty(PlayerStatusItemComponent.prototype, "theme", {
     get: function get() {
       var themes = ['first', 'second', 'third', 'fourth'];
       return themes[this.index];
@@ -58904,7 +58919,7 @@ function (_super) {
     enumerable: true,
     configurable: true
   });
-  Object.defineProperty(PlayerStatusListComponent.prototype, "poorWith", {
+  Object.defineProperty(PlayerStatusItemComponent.prototype, "poorWith", {
     get: function get() {
       if (!this.poor) {
         return false;
@@ -58915,7 +58930,7 @@ function (_super) {
     enumerable: true,
     configurable: true
   });
-  Object.defineProperty(PlayerStatusListComponent.prototype, "place", {
+  Object.defineProperty(PlayerStatusItemComponent.prototype, "place", {
     get: function get() {
       var places = {
         1: '1st',
@@ -58929,27 +58944,31 @@ function (_super) {
     configurable: true
   });
 
-  PlayerStatusListComponent.prototype.settleValidation = function (v) {
-    return v !== '' && parseInt(v) < 100000000 && parseInt(v) > -100000000 && parseFloat(v) % 1 === 0;
+  PlayerStatusItemComponent.prototype.settleValidation = function (v) {
+    return v !== '' && parseInt(v) < 100000000000 && parseInt(v) > -100000000000 && parseFloat(v) % 1 === 0;
   };
 
-  PlayerStatusListComponent.prototype.changePoor = function () {
+  PlayerStatusItemComponent.prototype.changePoor = function () {
     nodecg.sendMessage('game:poor-to', this.index);
   };
 
-  __decorate([vue_property_decorator_1.Prop(Object)], PlayerStatusListComponent.prototype, "player", void 0);
+  __decorate([vue_property_decorator_1.Prop(Object)], PlayerStatusItemComponent.prototype, "player", void 0);
 
-  __decorate([vue_property_decorator_1.Prop(Number)], PlayerStatusListComponent.prototype, "index", void 0);
+  __decorate([vue_property_decorator_1.Prop(Number)], PlayerStatusItemComponent.prototype, "index", void 0);
 
-  __decorate([vue_property_decorator_1.Prop(Object)], PlayerStatusListComponent.prototype, "poor", void 0);
+  __decorate([vue_property_decorator_1.Prop(Object)], PlayerStatusItemComponent.prototype, "poor", void 0);
 
-  __decorate([vue_property_decorator_1.Emit()], PlayerStatusListComponent.prototype, "changePoor", null);
+  __decorate([vue_property_decorator_1.Watch('player')], PlayerStatusItemComponent.prototype, "onPlayerChanged", null);
 
-  PlayerStatusListComponent = __decorate([vue_property_decorator_1.Component], PlayerStatusListComponent);
-  return PlayerStatusListComponent;
+  __decorate([vue_property_decorator_1.Watch('man')], PlayerStatusItemComponent.prototype, "onManYenChanged", null);
+
+  __decorate([vue_property_decorator_1.Emit()], PlayerStatusItemComponent.prototype, "changePoor", null);
+
+  PlayerStatusItemComponent = __decorate([vue_property_decorator_1.Component], PlayerStatusItemComponent);
+  return PlayerStatusItemComponent;
 }(vue_property_decorator_1.Vue);
 
-exports.default = PlayerStatusListComponent;
+exports.default = PlayerStatusItemComponent;
         var $83dacf = exports.default || module.exports;
       
       if (typeof $83dacf === 'function') {
@@ -59026,16 +59045,16 @@ exports.default = PlayerStatusListComponent;
                           min: "-99999999",
                           size: "12",
                           label: "総資産",
-                          suffix: "百万円",
+                          suffix: "万円",
                           "hide-details": "",
                           rules: [_vm.settleValidation]
                         },
                         model: {
-                          value: _vm.player.status.millions,
+                          value: _vm.man,
                           callback: function($$v) {
-                            _vm.$set(_vm.player.status, "millions", _vm._n($$v))
+                            _vm.man = _vm._n($$v)
                           },
-                          expression: "player.status.millions"
+                          expression: "man"
                         }
                       })
                     ],
@@ -59189,7 +59208,7 @@ function (_super) {
       }
 
       return !this.players.map(function (player) {
-        return player.status.millions < 100000000 && player.status.millions > -100000000 && player.status.millions % 1 === 0;
+        return player.status.kiloYens < 100000000000 && player.status.kiloYens > -100000000000 && player.status.kiloYens % 1 === 0;
       }).includes(false);
     },
     enumerable: true,
@@ -59199,8 +59218,8 @@ function (_super) {
   PlayerStatusListComponent.prototype.submitSettlement = function () {
     var _this = this;
 
-    nodecg.sendMessage('player:settle-millions', this.players.map(function (player) {
-      return player.status.millions;
+    nodecg.sendMessage('player:settle-kilo-yens', this.players.map(function (player) {
+      return player.status.kiloYens;
     })).then(function () {
       nodecg.sendMessage('game:settlement', _this.settleYear);
     });
@@ -59516,7 +59535,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58792" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "60288" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};

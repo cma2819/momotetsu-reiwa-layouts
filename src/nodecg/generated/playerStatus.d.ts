@@ -7,5 +7,5 @@
 
 export interface PlayerStatus {
 	rank: number;
-	millions: number;
+	kiloYens: number;
 }
