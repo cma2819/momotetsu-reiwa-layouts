@@ -9,8 +9,8 @@ NodeCG layout bundle for momotetsu reiwa.
 
 ## ToDo
 
-- [ ]: animation in graphics
-- [ ]: change poor icon in graphics
-- [ ]: setting sort mode to player sort by placed
-- [ ]: goal animation in graphics
-- [ ]: add misc information to status (ex. 絶好調/絶不調, devils/angels, goal counts)
+- [ ] animation in graphics
+- [ ] change poor icon in graphics
+- [ ] setting sort mode to player sort by placed
+- [ ] goal animation in graphics
+- [ ] add misc information to status (ex. 絶好調/絶不調, devils/angels, goal counts)
